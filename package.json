@@ -1,0 +1,19 @@
+{
+  "name": "zhihu-api-koa",
+  "version": "1.0.0",
+  "description": "知乎api仿写",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "twoyoung",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.13.0",
+    "koa-router": "^9.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
