@@ -1,4 +1,5 @@
 const Koa = require('koa')
+const bodyParser = require('koa-bodyparser')
 const Router = require('koa-router')
 const app = new Koa()
 const router = new Router()
@@ -10,15 +11,22 @@ const auth = async (ctx, next) => {
     await ctx.throw(401)
   }
 }
-
-router.get('/', async (ctx, next) => {
-  ctx.body = 'hello koa'
+// 首页
+router.get('/:name/:age', async (ctx, next) => {
+  ctx.status = 404 // status 设置
+  ctx.body = `hello koa ${ctx.params.name} ${ctx.params.age}`
 })
-
+router.post('/', async (ctx, next) => {
+  ctx.status = 202
+  ctx.body = { name: '神奇的数据', type: 'Array' }
+})
+// 用户
 userRouter.get('/', auth, async (ctx, next) => {
+  ctx.status = 401
   ctx.body = '用户'
 })
 
+app.use(bodyParser())
 app.use(router.routes())
 app.use(userRouter.routes())
 app.use(userRouter.allowedMethods()) // 所有接口支持 options 请求中间件
