@@ -21,6 +21,7 @@ userRouter.get('/', auth, async (ctx, next) => {
 
 app.use(router.routes())
 app.use(userRouter.routes())
+app.use(userRouter.allowedMethods()) // 所有接口支持 options 请求中间件
 
 app.listen(3000)
 
