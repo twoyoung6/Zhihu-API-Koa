@@ -3,6 +3,7 @@ class HomeC {
     ctx.body = `<h1>知乎主页</h1>`
   }
   hello(ctx) {
+    ctx.status = 404 // status 设置
     ctx.body = `hello koa ${ctx.params.name} ${ctx.params.age}`
   }
   post(ctx) {

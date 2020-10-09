@@ -7,7 +7,6 @@ router.get('/', (ctx) => {
 })
 // 首页
 router.get('/:name/:age', async (ctx, next) => {
-  ctx.status = 404 // status 设置
   hello(ctx)
 })
 router.post('/', async (ctx, next) => {
