@@ -4,7 +4,7 @@
   "description": "知乎api仿写",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodemon app/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "twoyoung",
