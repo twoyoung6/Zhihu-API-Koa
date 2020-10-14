@@ -4,6 +4,18 @@ const bodyParser = require('koa-bodyparser')
 const signRoute = require('./routes')
 const error = require('koa-json-error')
 const parameter = require('koa-parameter')
+const mongoose = require('mongoose')
+const config = require('./config')
+
+// ‘MongoDB’ 数据库连接
+mongoose.connect(
+  config.dbUrl,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  console.log('MongoDB 数据库连接成功...')
+)
+mongoose.now('error', () => {
+  console.log(error)
+})
 
 // http 错误统一处理中间件
 app.use(
