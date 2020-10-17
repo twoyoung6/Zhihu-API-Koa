@@ -6,6 +6,7 @@ const {
   addUser,
   editUser,
   removeUser,
+  login,
 } = require('../controllers/user')
 
 // 路由中传递多中间件（授权中间件）
@@ -31,6 +32,10 @@ router.post('/edit', async (ctx, next) => {
 // 删除
 router.post('/remove', async (ctx, next) => {
   await removeUser(ctx)
+})
+// 登录
+router.post('/login', async (ctx, next) => {
+  await login(ctx)
 })
 
 module.exports = router

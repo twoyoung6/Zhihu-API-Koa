@@ -1,4 +1,6 @@
 const userModel = require('../models/user')
+const jwt = require('jsonwebtoken')
+const { JWT_PWD } = require('../config')
 class UserC {
   // 用户列表
   async userList(ctx) {
@@ -66,6 +68,19 @@ class UserC {
       return
     }
     ctx.body = '删除成功'
+  }
+  async login(ctx) {
+    ctx.verifyParams({
+      name: { type: 'string', require: true },
+      password: { type: 'string', require: true },
+    })
+    const user = await userModel.findOne(ctx.request.body)
+    if (!user) {
+      ctx.throw(404, '非法的用户名及密码...')
+    }
+    let { _id, name } = user
+    const token = jwt.sign({ _id, name }, JWT_PWD, { expiresIn: '1d' })
+    ctx.body = token
   }
 }
 
