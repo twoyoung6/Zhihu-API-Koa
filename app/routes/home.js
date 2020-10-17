@@ -2,14 +2,14 @@ const Router = require('koa-router')
 const router = new Router()
 const { index, hello, post } = require('../controllers/home')
 
-router.get('/', (ctx) => {
-  index(ctx)
+router.get('/', async (ctx) => {
+  await index(ctx)
 })
 // 首页
 router.get('/:name/:age', async (ctx, next) => {
-  hello(ctx)
+  await hello(ctx)
 })
 router.post('/', async (ctx, next) => {
-  post(ctx)
+  await post(ctx)
 })
 module.exports = router
