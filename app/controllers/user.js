@@ -16,24 +16,33 @@ class UserC {
     }
     ctx.body = user
   }
-  // 新增用户
+  // 新增（注册）用户
   async addUser(ctx) {
     ctx.verifyParams({
       name: { type: 'string', required: true },
+      password: { type: 'string', required: true },
+      addr: { type: 'string', required: false },
       age: { type: 'number', required: false },
     })
+    // 注册用户冲突检测
+    let { name } = ctx.request.body
+    let isRepeat = await userModel.findOne({ name })
+    if (isRepeat) {
+      ctx.throw(409, '好巧~~~该名称已被注册了...')
+    }
     const user = await new userModel(ctx.request.body).save()
     if (!user) {
       ctx.throw(400, '新增用户失败...')
       return
     }
-    ctx.body = user
+    ctx.body = '用户注册（新增）成功'
   }
   // 修改用户
   async editUser(ctx) {
     ctx.verifyParams({
       id: { type: 'string', required: true },
       name: { type: 'string', required: false },
+      password: { type: 'string', required: false },
       age: { type: 'number', required: false },
     })
     const user = await userModel.findByIdAndUpdate(

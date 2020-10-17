@@ -1,4 +1,4 @@
-## 1.0.0 (2020-10-14)
+## 1.0.0 (2020-10-17)
 
 *  options 请求中间件 ([f0eb8f1](https://github.com/twoyoung6/Zhihu-API-Koa/commit/f0eb8f1))
 * HTTP 响应例子（状态码） ([4794e8b](https://github.com/twoyoung6/Zhihu-API-Koa/commit/4794e8b))
@@ -10,6 +10,7 @@
 * 引入 koa-parameter 进行 http请求参数校验 ([6ba2c8f](https://github.com/twoyoung6/Zhihu-API-Koa/commit/6ba2c8f))
 * 引入 mongoose 并连接本地数据库 ([21e3ad5](https://github.com/twoyoung6/Zhihu-API-Koa/commit/21e3ad5))
 * 控制器+路由分离，合理的规范开发工程结构 ([af8a0b2](https://github.com/twoyoung6/Zhihu-API-Koa/commit/af8a0b2))
+* 用户增删改查接口完成 ([53370a9](https://github.com/twoyoung6/Zhihu-API-Koa/commit/53370a9))
 
 
 
