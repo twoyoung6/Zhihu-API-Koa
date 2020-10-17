@@ -9,8 +9,8 @@ const {
   login,
 } = require('../controllers/user')
 
-// 路由中传递多中间件（授权中间件）
-// const auth = require('../auth')
+// 路由中传递多中间件（认证 及 授权中间件）
+const auth = require('../auth')
 
 // 用户列表
 router.get('/', async (ctx, next) => {
@@ -22,15 +22,15 @@ router.post('/info', async (ctx, next) => {
   await userInfo(ctx)
 })
 // 新增
-router.post('/add', async (ctx, next) => {
+router.post('/add', auth, async (ctx, next) => {
   await addUser(ctx)
 })
 // 编辑
-router.post('/edit', async (ctx, next) => {
+router.post('/edit', auth, async (ctx, next) => {
   await editUser(ctx)
 })
 // 删除
-router.post('/remove', async (ctx, next) => {
+router.post('/remove', auth, async (ctx, next) => {
   await removeUser(ctx)
 })
 // 登录

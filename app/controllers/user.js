@@ -2,6 +2,7 @@ const userModel = require('../models/user')
 const jwt = require('jsonwebtoken')
 const { JWT_PWD } = require('../config')
 class UserC {
+  // 授权
   // 用户列表
   async userList(ctx) {
     ctx.body = await userModel.find()
@@ -49,7 +50,8 @@ class UserC {
     })
     const user = await userModel.findByIdAndUpdate(
       ctx.request.body.id,
-      ctx.request.body
+      ctx.request.body,
+      { new: true }
     )
     if (!user) {
       ctx.throw(400, '编辑用户失败...')
@@ -80,7 +82,7 @@ class UserC {
     }
     let { _id, name } = user
     const token = jwt.sign({ _id, name }, JWT_PWD, { expiresIn: '1d' })
-    ctx.body = token
+    ctx.body = { token }
   }
 }
 
