@@ -4,6 +4,7 @@
 * HTTP 响应例子（状态码） ([4794e8b](https://github.com/twoyoung6/Zhihu-API-Koa/commit/4794e8b))
 * init ([209dfb1](https://github.com/twoyoung6/Zhihu-API-Koa/commit/209dfb1))
 * Initial commit ([981448a](https://github.com/twoyoung6/Zhihu-API-Koa/commit/981448a))
+* jwt认证之后的 简单授权实现（编辑/删除接口授权）； ([252f2df](https://github.com/twoyoung6/Zhihu-API-Koa/commit/252f2df))
 * koa 错误处理方式 ([14c0274](https://github.com/twoyoung6/Zhihu-API-Koa/commit/14c0274))
 * koa-router 路由前缀；路由中传递多中间件（授权中间件）的使用 ([8b6c3d5](https://github.com/twoyoung6/Zhihu-API-Koa/commit/8b6c3d5))
 * 实现用户注册接口（user Schema 新增密码字段） ([8953e25](https://github.com/twoyoung6/Zhihu-API-Koa/commit/8953e25))

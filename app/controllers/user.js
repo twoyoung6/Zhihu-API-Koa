@@ -1,11 +1,12 @@
 const userModel = require('../models/user')
-const jwt = require('jsonwebtoken')
-const { JWT_PWD } = require('../config')
+const jsonwebtoken = require('jsonwebtoken')
+const { secret } = require('../config')
 class UserC {
   // 授权
   async checkUserAuth(ctx, next) {
     let req = ctx.request.body
-    if (req.id !== ctx.state.userInfo._id && req.id !== 'admin') {
+    // console.log(ctx.state)
+    if (req.id !== ctx.state.user._id && req.id !== 'admin') {
       ctx.throw(401, '暂无权限进行此操作')
     }
     await next()
@@ -89,7 +90,7 @@ class UserC {
       ctx.throw(404, '非法的用户名及密码...')
     }
     let { _id, name } = user
-    const token = jwt.sign({ _id, name }, JWT_PWD, { expiresIn: '1d' })
+    const token = jsonwebtoken.sign({ _id, name }, secret, { expiresIn: '1d' })
     ctx.body = { token }
   }
 }

@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "nodemon app",
     "build": "cross-env NODE_ENV=production node app",
+    "log": "node git log --pretty=%h - %s - %cd > log.md --graph",
+    "changelog": "node conventional-changelog -p -i CHANGELOG.md -s -r 0",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "twoyoung",
@@ -15,6 +17,7 @@
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
     "koa-json-error": "^3.1.2",
+    "koa-jwt": "^4.0.0",
     "koa-parameter": "^3.0.1",
     "koa-router": "^9.4.0",
     "mongoose": "^5.10.9"
