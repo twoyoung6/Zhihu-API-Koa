@@ -7,6 +7,7 @@ const {
   editUser,
   removeUser,
   login,
+  checkUserAuth,
 } = require('../controllers/user')
 
 // 路由中传递多中间件（认证 及 授权中间件）
@@ -25,12 +26,12 @@ router.post('/info', async (ctx, next) => {
 router.post('/add', auth, async (ctx, next) => {
   await addUser(ctx)
 })
-// 编辑
-router.post('/edit', auth, async (ctx, next) => {
+// 编辑（checkUserAuth 授权中间件，限制用户只能操作自己的信息）
+router.post('/edit', auth, checkUserAuth, async (ctx, next) => {
   await editUser(ctx)
 })
 // 删除
-router.post('/remove', auth, async (ctx, next) => {
+router.post('/remove', auth, checkUserAuth, async (ctx, next) => {
   await removeUser(ctx)
 })
 // 登录

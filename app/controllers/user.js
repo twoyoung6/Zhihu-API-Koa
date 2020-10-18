@@ -3,6 +3,14 @@ const jwt = require('jsonwebtoken')
 const { JWT_PWD } = require('../config')
 class UserC {
   // 授权
+  async checkUserAuth(ctx, next) {
+    let req = ctx.request.body
+    if (req.id !== ctx.state.userInfo._id && req.id !== 'admin') {
+      ctx.throw(401, '暂无权限进行此操作')
+    }
+    await next()
+  }
+
   // 用户列表
   async userList(ctx) {
     ctx.body = await userModel.find()
