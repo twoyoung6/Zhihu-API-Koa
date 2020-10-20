@@ -10,6 +10,7 @@
 * 实现用户注册接口（user Schema 新增密码字段） ([8953e25](https://github.com/twoyoung6/Zhihu-API-Koa/commit/8953e25))
 * 实现用户登录接口并返回 token ([8d0fd1c](https://github.com/twoyoung6/Zhihu-API-Koa/commit/8d0fd1c))
 * 引入 koa-json-error 统一错误处理中间件； 引入 cross-env 区分环境； ([21b94b5](https://github.com/twoyoung6/Zhihu-API-Koa/commit/21b94b5))
+* 引入 koa-jwt 替代自己实现的 jwt ([4205fb3](https://github.com/twoyoung6/Zhihu-API-Koa/commit/4205fb3))
 * 引入 koa-parameter 进行 http请求参数校验 ([6ba2c8f](https://github.com/twoyoung6/Zhihu-API-Koa/commit/6ba2c8f))
 * 引入 mongoose 并连接本地数据库 ([21e3ad5](https://github.com/twoyoung6/Zhihu-API-Koa/commit/21e3ad5))
 * 接口 实现 JWT 认证； ([78486f1](https://github.com/twoyoung6/Zhihu-API-Koa/commit/78486f1))

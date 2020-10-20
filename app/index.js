@@ -1,6 +1,8 @@
 const Koa = require('koa')
 const app = new Koa()
-const bodyParser = require('koa-bodyparser')
+const path = require('path')
+const koaBody = require('koa-body')
+const koaStatic = require('koa-static')
 const signRoute = require('./routes')
 const error = require('koa-json-error')
 const parameter = require('koa-parameter')
@@ -17,6 +19,9 @@ mongoose.now('error', () => {
   console.log(error)
 })
 
+// 静态服务中间件
+app.use(koaStatic(path.join(__dirname, '/public')))
+
 // http 错误统一处理中间件
 app.use(
   error({
@@ -26,7 +31,16 @@ app.use(
 )
 
 // post 参数解析中间件
-app.use(bodyParser())
+app.use(
+  koaBody({
+    multipart: true,
+    formidable: {
+      uploadDir: path.join(__dirname, '/public/uploads'),
+      keepExtensions: true, // 保持文件jpg,png 拓展名
+      maxFieldsSize: 2 * 1024 * 1024, // 文件上传大小
+    },
+  })
+)
 
 // http 参数校验中间件
 app.use(parameter(app))
