@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+        
+    <style type="text/css">
+      .input-file {
+        margin: 100px auto;
+      }
+      .btn {
+        margin: 0 10px;
+        display: inline-block;
+      }
+      .btn button {
+        width: 60px;
+        height: 30px;
+        background-color: #cdd1f7;
+        border: none;
+      }
+      input[id='avatval'] {
+        padding: 3px 6px;
+        padding-left: 10px;
+        border: 1px solid #e7eaec;
+        width: 230px;
+        height: 35px;
+        line-height: 35px;
+        border-left: 3px solid #3fb7eb;
+        background: #fafafb;
+        border-radius: 5px;
+        outline: none;
+      }
+    </style>
+  </head>
+  <body>
+        
+    <div class="input-file">
+             
+      <form action="/upload" method="POST" enctype="multipart/form-data">
+                   
+        <input
+          type="file"
+          name="file"
+          id="avatval"
+          accept="image/*"
+          placeholder="请选择图片···"
+          style="vertical-align: middle"
+        />
+        <div class="btn"><button type="submit">上 传</button></div>
+      </form>
+         
+    </div>
+  </body>
+</html>
