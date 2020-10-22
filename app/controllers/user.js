@@ -56,6 +56,12 @@ class UserC {
       name: { type: 'string', required: false },
       password: { type: 'string', required: false },
       age: { type: 'number', required: false },
+      avatar_url: { type: 'string', required: false },
+      gender: { type: 'string', required: true },
+      introduce: { type: 'string', required: false },
+      locations: { type: 'array', itemType: 'string', required: false },
+      business: { type: 'string', required: false },
+      occupation: { type: 'array', itemType: 'object', required: false },
     })
     const user = await userModel.findByIdAndUpdate(
       ctx.request.body.id,
