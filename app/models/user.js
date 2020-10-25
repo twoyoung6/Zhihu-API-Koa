@@ -35,6 +35,10 @@ const userSchema = new Schema({
       },
     ],
   },
+  followList: {
+    type: [{ type: Schema.Types.ObjectId, ref: 'User' }], // 定义类型为 objectId ,ref是关联的模型名称
+    select: false,
+  },
 })
 
 // model 申明（实例化） userSchema 表

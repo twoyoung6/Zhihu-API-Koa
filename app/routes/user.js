@@ -10,6 +10,10 @@ const {
   removeUser,
   login,
   checkUserAuth,
+  getFollowList,
+  follow,
+  unFollow,
+  getFansList,
 } = require('../controllers/user')
 
 // 路由中传递多中间件（认证 及 授权中间件）
@@ -40,6 +44,23 @@ router.post('/remove', auth, checkUserAuth, async (ctx, next) => {
 // 登录
 router.post('/login', async (ctx, next) => {
   await login(ctx)
+})
+
+// 关注列表
+router.post('/followList', async (ctx, next) => {
+  await getFollowList(ctx)
+})
+// 粉丝列表
+router.post('/fansList', async (ctx, next) => {
+  await getFansList(ctx)
+})
+// 关注
+router.post('/follow', auth, async (ctx, next) => {
+  await follow(ctx)
+})
+// 取消关注
+router.post('/unFollow', auth, async (ctx, next) => {
+  await unFollow(ctx)
 })
 
 module.exports = router
