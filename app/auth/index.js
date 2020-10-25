@@ -1,4 +1,4 @@
-// 认证中间件
+// 自己实现的简易认证中间件
 const jwt = require('jsonwebtoken')
 const { JWT_PWD } = require('../config')
 

@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const userModel = require('../models/user')
 const jsonwebtoken = require('jsonwebtoken')
 const { secret } = require('../config')
-const { decorator } = require('../../utils/utils.js') // 请求 response 统一处理脚本
+const { decorator } = require('../utils/utils.js') // 请求 response 统一处理脚本
 const { ObjectId } = require('mongoose')
 class UserC {
   // 授权
