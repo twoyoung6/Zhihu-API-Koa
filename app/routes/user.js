@@ -10,6 +10,7 @@ const {
   removeUser,
   login,
   checkUserAuth,
+  checkUserExist,
   getFollowList,
   follow,
   unFollow,
@@ -55,11 +56,11 @@ router.post('/fansList', async (ctx, next) => {
   await getFansList(ctx)
 })
 // 关注
-router.post('/follow', auth, async (ctx, next) => {
+router.post('/follow', auth, checkUserExist, async (ctx, next) => {
   await follow(ctx)
 })
 // 取消关注
-router.post('/unFollow', auth, async (ctx, next) => {
+router.post('/unFollow', auth, checkUserExist, async (ctx, next) => {
   await unFollow(ctx)
 })
 

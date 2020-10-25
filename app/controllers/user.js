@@ -1,7 +1,9 @@
+const mongoose = require('mongoose')
 const userModel = require('../models/user')
 const jsonwebtoken = require('jsonwebtoken')
 const { secret } = require('../config')
 const { decorator } = require('../../utils/utils.js') // 请求 response 统一处理脚本
+const { ObjectId } = require('mongoose')
 class UserC {
   // 授权
   async checkUserAuth(ctx, next) {
@@ -12,7 +14,16 @@ class UserC {
     }
     await next()
   }
-
+  // 检测用户的有效性
+  async checkUserExist(ctx, next) {
+    let id = mongoose.Types.ObjectId(ctx.request.body.id) // id 转 ObjectId
+    let user = await userModel.findById(id)
+    if (!user) {
+      ctx.throw(404, '该用户不存在...')
+      return
+    }
+    await next()
+  }
   // 用户列表
   async userList(ctx) {
     ctx.body = decorator({
