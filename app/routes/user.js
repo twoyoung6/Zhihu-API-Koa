@@ -22,7 +22,7 @@ const {
 const auth = jwt({ secret })
 
 // 用户列表
-router.get('/', async (ctx, next) => {
+router.post('/', async (ctx, next) => {
   await userList(ctx)
 })
 

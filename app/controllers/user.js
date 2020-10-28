@@ -26,8 +26,17 @@ class UserC {
   }
   // 用户列表
   async userList(ctx) {
+    ctx.verifyParams({
+      size: { type: 'number', required: true },
+      page: { type: 'number', required: true },
+    })
+    const page = Math.max(ctx.request.body.page * 1, 1) - 1 // 目前是第几页
+    const size = Math.max(ctx.request.body.size * 1, 10) // 每页的条数
     ctx.body = decorator({
-      data: await userModel.find(),
+      data: await userModel
+        .find({ name: new RegExp(ctx.request.body.q) }) // 模糊搜索的实现
+        .limit(size)
+        .skip(page * size),
     })
   }
   // 用户基本信息

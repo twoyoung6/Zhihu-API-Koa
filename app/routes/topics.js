@@ -2,6 +2,8 @@ const jwt = require('koa-jwt')
 const { secret } = require('../config')
 const Router = require('koa-router')
 const router = new Router({ prefix: '/topics' }) // koa-router 路由前缀
+
+// 引入控制器
 const {
   topicsList,
   topicsInfo,
@@ -11,9 +13,8 @@ const {
 } = require('../controllers/topics.js')
 
 const auth = jwt({ secret })
-// 用户列表
-router.get('/', async (ctx, next) => {
-  console.log(ctx)
+// 话题列表
+router.post('/', async (ctx, next) => {
   await topicsList(ctx)
 })
 
