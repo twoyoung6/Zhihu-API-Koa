@@ -20,24 +20,43 @@ const userSchema = new Schema({
   // 自我介绍
   introduce: { type: String },
   // 地址
-  locations: { type: [{ type: String, required: false }] },
+  locations: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Topics',
+        required: false,
+        select: false,
+      },
+    ],
+  },
   // 行业
-  business: { type: String, required: false },
+  business: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Topics',
+        required: false,
+        select: false,
+      },
+    ],
+  },
   // 职业
   occupation: {
     type: [
       {
-        company: { type: String },
+        company: { type: Schema.Types.ObjectId, ref: 'Topics', select: false },
         job: {
-          type: String,
+          type: Schema.Types.ObjectId,
+          ref: 'Topics',
           enum: ['coder', 'player', 'singer', 'dancer', 'nijia'],
+          select: false,
         },
       },
     ],
   },
   followList: {
-    type: [{ type: Schema.Types.ObjectId, ref: 'User' }], // 定义类型为 objectId ,ref是关联的模型名称
-    select: false,
+    type: [{ type: Schema.Types.ObjectId, ref: 'User' }], // 定义类型为 objectId ,ref是关联的表实例名称
   },
 })
 

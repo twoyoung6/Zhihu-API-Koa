@@ -8,8 +8,7 @@ class UserC {
   // 授权
   async checkUserAuth(ctx, next) {
     let req = ctx.request.body
-    // console.log(req, ctx.state)
-    if (req.id !== ctx.state.user._id && req.id !== 'admin') {
+    if (req.id !== ctx.state.user._id && ctx.state.user.name !== 'admin') {
       ctx.throw(401, '暂无权限进行此操作')
     }
     await next()
@@ -44,7 +43,12 @@ class UserC {
     ctx.verifyParams({
       id: { type: 'string', required: true },
     })
-    let user = await userModel.findById(ctx.request.body.id)
+    // followList locations business occupation.company occupation.job（查询条件 查询结果的作用域 field）
+    let field = ctx.request.body.field.split(',').join(' ')
+    let user = await userModel
+      .findById(ctx.request.body.id)
+      .select(field)
+      .populate(field)
     if (!user) {
       ctx.throw(400, '未查询到该用户任何信息...')
       return
@@ -87,7 +91,7 @@ class UserC {
       gender: { type: 'string', required: true },
       introduce: { type: 'string', required: false },
       locations: { type: 'array', itemType: 'string', required: false },
-      business: { type: 'string', required: false },
+      business: { type: 'array', required: false },
       occupation: { type: 'array', itemType: 'object', required: false },
     })
     const user = await userModel.findByIdAndUpdate(
