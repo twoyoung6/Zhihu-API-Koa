@@ -141,13 +141,10 @@ class UserC {
       message: '登录成功...',
     }
   }
-  // 关注列表
+  // 登录用户的关注
   async getFollowList(ctx) {
-    ctx.verifyParams({
-      id: { type: 'string', require: true },
-    })
     const data = await userModel
-      .findById(ctx.request.body.id)
+      .findById(ctx.state.user._id)
       .select('+followList')
       .populate('followList')
     // populate 返回对象 followList 所有数据而不只是 id
@@ -161,13 +158,10 @@ class UserC {
       data: data.followList,
     })
   }
-  // 粉丝列表
+  // 登录用户的粉丝列表
   async getFansList(ctx) {
-    ctx.verifyParams({
-      id: { type: 'string', require: true },
-    })
     try {
-      const fans = await userModel.find({ followList: [ctx.request.body.id] })
+      const fans = await userModel.find({ followList: [ctx.state.user._id] })
       ctx.body = decorator({
         message: '粉丝列表查询成功',
         data: fans,
@@ -331,13 +325,10 @@ class UserC {
       })
     }
   }
-  // 关注话题列表
+  // 登录用户关注的话题列表
   async getFollowTopicsList(ctx) {
-    ctx.verifyParams({
-      id: { type: 'string', require: true },
-    })
     const data = await userModel
-      .findById(ctx.request.body.id)
+      .findById(ctx.state.user._id)
       .select('+followTopics')
       .populate('followTopics')
     // populate 返回对象 followTopics 所有数据而不只是 id

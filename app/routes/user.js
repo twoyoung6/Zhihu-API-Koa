@@ -52,11 +52,11 @@ router.post('/login', async (ctx, next) => {
 })
 
 // 关注列表
-router.post('/followList', async (ctx, next) => {
+router.post('/followList', auth, async (ctx, next) => {
   await getFollowList(ctx)
 })
 // 粉丝列表
-router.post('/fansList', async (ctx, next) => {
+router.post('/fansList', auth, async (ctx, next) => {
   await getFansList(ctx)
 })
 // 关注别人
@@ -76,7 +76,7 @@ router.post('/unFollowTopic', auth, checkTopicExist, async (ctx, next) => {
   await unFollowTopic(ctx)
 })
 // 获取用户当前关注的话题列表
-router.post('/getFollowTopicsList', auth, checkUserAuth, async (ctx, next) => {
+router.post('/getFollowTopicsList', auth, async (ctx, next) => {
   await getFollowTopicsList(ctx)
 })
 module.exports = router

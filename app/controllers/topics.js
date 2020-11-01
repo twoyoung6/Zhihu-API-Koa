@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const topicsModel = require('../models/topics.js')
+const userModel = require('../models/user.js')
 const { decorator } = require('../utils/utils.js') // 请求 response 统一处理脚本
 class TopicsC {
   // 授权
@@ -83,6 +84,24 @@ class TopicsC {
     ctx.body = decorator({
       message: `编辑成功 ${topics}`,
     })
+  }
+
+  // 获取关注该话题的用户列表
+  async getTopicFollows(ctx) {
+    ctx.verifyParams({
+      id: { type: 'string', required: true },
+    })
+    try {
+      const userList = await userModel.find({
+        followTopics: [ctx.request.body.id],
+      })
+      ctx.body = decorator({
+        message: '该话题关注者查询成功',
+        data: userList,
+      })
+    } catch (error) {
+      ctx.body = decorator({ code: 400, message: '响应失败' })
+    }
   }
 }
 
