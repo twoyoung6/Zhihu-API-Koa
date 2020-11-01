@@ -57,6 +57,11 @@ const userSchema = new Schema({
   },
   followList: {
     type: [{ type: Schema.Types.ObjectId, ref: 'User' }], // 定义类型为 objectId ,ref是关联的表实例名称
+    select: false,
+  },
+  followTopics: {
+    type: [{ type: Schema.Types.ObjectId, ref: 'Topics' }],
+    select: false,
   },
 })
 

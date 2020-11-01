@@ -4,4 +4,14 @@
 
 仿知乎 API 项目
 
-学习视频课程地址参考：<a href="https://coding.imooc.com/class/354.html">Node.js 仿知乎服务端-深入理解 RESTful API</a>
+📺 视频地址：<a href="https://coding.imooc.com/class/354.html">Node.js 仿知乎服务端-深入理解 RESTful API</a>
+
+# API 介绍
+
+## 用户接口
+
+🕴 用户的 增删改接口有 登录校验及授权校验（登录用户不能操作其他用户，除非 admin 用户）
+
+## 话题接口
+
+🎙 话题的 增改接口有 登录校验及授权校验（只有 admin 用户才可以操作话题）

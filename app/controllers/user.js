@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const userModel = require('../models/user')
+const topicsModel = require('../models/topics')
 const jsonwebtoken = require('jsonwebtoken')
 const { secret } = require('../config')
 const { decorator } = require('../utils/utils.js') // 请求 response 统一处理脚本
-const { ObjectId } = require('mongoose')
 class UserC {
   // 授权
   async checkUserAuth(ctx, next) {
@@ -15,6 +15,9 @@ class UserC {
   }
   // 检测用户的有效性
   async checkUserExist(ctx, next) {
+    ctx.verifyParams({
+      id: { type: 'string', require: true },
+    })
     let id = mongoose.Types.ObjectId(ctx.request.body.id) // id 转 ObjectId
     let user = await userModel.findById(id)
     if (!user) {
@@ -149,7 +152,10 @@ class UserC {
       .populate('followList')
     // populate 返回对象 followList 所有数据而不只是 id
     if (!data) {
-      ctx.throw(404)
+      ctx.body = decorator({
+        massage: '用户不存在',
+        code: 404,
+      })
     }
     ctx.body = decorator({
       data: data.followList,
@@ -170,7 +176,7 @@ class UserC {
       ctx.body = decorator({ code: 400, message: '响应失败' })
     }
   }
-  // 关注
+  // 关注别人
   async follow(ctx) {
     ctx.verifyParams({
       id: { type: 'string', require: true },
@@ -202,7 +208,7 @@ class UserC {
       })
     }
   }
-  // 取消关注
+  // 取消关注别人
   async unFollow(ctx) {
     ctx.verifyParams({
       id: { type: 'string', require: true },
@@ -240,6 +246,110 @@ class UserC {
         message: '取消关注失败~~您还未关注过Ta...',
       })
     }
+  }
+
+  // 检测话题的有效性
+  async checkTopicExist(ctx, next) {
+    ctx.verifyParams({
+      id: { type: 'string', require: true },
+    })
+    let id = mongoose.Types.ObjectId(ctx.request.body.id) // id 转 ObjectId
+    let user = await topicsModel.findById(id)
+    if (!user) {
+      ctx.throw(404, '该话题还未创建...')
+      return
+    }
+    await next()
+  }
+  // 关注话题
+  async followTopic(ctx) {
+    ctx.verifyParams({
+      id: { type: 'string', require: true },
+    })
+    let param = ctx.request.body.id
+    // 获取我关注的话题列表
+    const me = await userModel
+      .findById(ctx.state.user._id)
+      .select('+followTopics')
+    // 关注的话题不在当前登录用户的话题列表中才可以关注成功
+    if (
+      !me.followTopics
+        .map((val) => {
+          return `${val}`
+        })
+        .includes(param)
+    ) {
+      me.followTopics.push(param)
+      me.save()
+      ctx.body = decorator({
+        message: '关注成功...',
+        code: 204,
+      })
+    } else {
+      ctx.body = decorator({
+        code: 203,
+        message: '关注失败~~您已经关注过该话题...',
+      })
+    }
+  }
+  // 取消关注话题
+  async unFollowTopic(ctx) {
+    ctx.verifyParams({
+      id: { type: 'string', require: true },
+    })
+    let param = ctx.request.body.id
+    // 获取我的粉丝列表
+    const me = await userModel
+      .findById(ctx.state.user._id)
+      .select('+followTopics')
+    // 关注的话题不在当前登录话题的粉丝列表中以及关注的不是自己的情况下才可以关注成功
+    if (
+      me.followTopics
+        .map((val) => {
+          return `${val}`
+        })
+        .includes(param)
+    ) {
+      // 获取当前取消关注ID在列表中的位置索引
+      let index = me.followTopics
+        .map((val) => {
+          return `${val}`
+        })
+        .findIndex((val) => {
+          return val == param
+        })
+      me.followTopics.splice(index, 1)
+      me.save()
+      ctx.body = decorator({
+        message: '取消关注成功...',
+        code: 200,
+      })
+    } else {
+      ctx.body = decorator({
+        code: 204,
+        message: '取消关注失败~~您还未关注该话题...',
+      })
+    }
+  }
+  // 关注话题列表
+  async getFollowTopicsList(ctx) {
+    ctx.verifyParams({
+      id: { type: 'string', require: true },
+    })
+    const data = await userModel
+      .findById(ctx.request.body.id)
+      .select('+followTopics')
+      .populate('followTopics')
+    // populate 返回对象 followTopics 所有数据而不只是 id
+    if (!data) {
+      ctx.body = decorator({
+        massage: '话题不存在',
+        code: 404,
+      })
+    }
+    ctx.body = decorator({
+      data: data.followTopics,
+    })
   }
 }
 

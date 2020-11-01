@@ -15,6 +15,10 @@ const {
   follow,
   unFollow,
   getFansList,
+  followTopic,
+  unFollowTopic,
+  checkTopicExist,
+  getFollowTopicsList,
 } = require('../controllers/user')
 
 // 路由中传递多中间件（认证 及 授权中间件）
@@ -55,13 +59,24 @@ router.post('/followList', async (ctx, next) => {
 router.post('/fansList', async (ctx, next) => {
   await getFansList(ctx)
 })
-// 关注
+// 关注别人
 router.post('/follow', auth, checkUserExist, async (ctx, next) => {
   await follow(ctx)
 })
-// 取消关注
+// 取消关注别人
 router.post('/unFollow', auth, checkUserExist, async (ctx, next) => {
   await unFollow(ctx)
 })
-
+// 关注话题
+router.post('/followTopic', auth, checkTopicExist, async (ctx, next) => {
+  await followTopic(ctx)
+})
+// 取消关注话题
+router.post('/unFollowTopic', auth, checkTopicExist, async (ctx, next) => {
+  await unFollowTopic(ctx)
+})
+// 获取用户当前关注的话题列表
+router.post('/getFollowTopicsList', auth, checkUserAuth, async (ctx, next) => {
+  await getFollowTopicsList(ctx)
+})
 module.exports = router
