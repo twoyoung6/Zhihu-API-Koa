@@ -1,4 +1,4 @@
-// 用户表模型设计
+// 话题表模型设计
 const mongoose = require('mongoose')
 const { Schema, model } = mongoose
 mongoose.set('useFindAndModify', false)

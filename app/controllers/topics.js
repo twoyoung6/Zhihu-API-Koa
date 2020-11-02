@@ -93,7 +93,7 @@ class TopicsC {
     })
     try {
       const userList = await userModel.find({
-        followTopics: [ctx.request.body.id],
+        followTopics: ctx.request.body.id,
       })
       ctx.body = decorator({
         message: '该话题关注者查询成功',
