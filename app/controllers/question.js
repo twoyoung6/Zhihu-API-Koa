@@ -1,10 +1,11 @@
 const mongoose = require('mongoose')
+const question = require('../models/question.js')
 const questionModel = require('../models/question.js')
 const userModel = require('../models/user.js')
 const { decorator } = require('../utils/utils.js') // 请求 response 统一处理脚本
 class QuestionC {
   // 🍎检测问题的有效性
-  async checkQuestionExist(ctx) {
+  async checkQuestionExist(ctx, next) {
     const question = await questionModel.findById(ctx.request.body.id)
     if (!question) {
       ctx.body = decorator({
@@ -36,7 +37,16 @@ class QuestionC {
         .skip(page * size),
     })
   }
-
+  // 问题详情
+  async questionInfo(ctx) {
+    ctx.verifyParams({
+      id: { type: 'string', required: true },
+    })
+    const question = await questionModel.findById(ctx.request.body.id)
+    ctx.body = decorator({
+      data: question,
+    })
+  }
   // 新增问题
   async addQuestion(ctx) {
     ctx.verifyParams({
@@ -71,7 +81,7 @@ class QuestionC {
     await ctx.state.question.update(ctx.request.body, {
       new: true,
     })
-    if (!question) {
+    if (!ctx.state.question) {
       ctx.throw(400, '编辑问题失败...')
       return
     }
@@ -83,12 +93,12 @@ class QuestionC {
   // 获取登录用户发布的问题列表
   async getUserCreateQuestions(ctx) {
     try {
-      const userList = await userModel.find({
-        followQuestion: ctx.state.user._id,
+      const questionList = await questionModel.find({
+        createUser: ctx.state.user._id,
       })
       ctx.body = decorator({
-        message: '该问题关注者查询成功',
-        data: userList,
+        message: '查询成功',
+        data: questionList,
       })
     } catch (error) {
       ctx.body = decorator({ code: 400, message: '响应失败' })

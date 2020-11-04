@@ -31,7 +31,7 @@ router.post('/edit', auth, checkQuestionExist, async (ctx, next) => {
   await editQuestion(ctx)
 })
 
-router.post('/createQuestionsList', async (ctx, next) => {
+router.post('/createQuestionsList', auth, async (ctx, next) => {
   await getUserCreateQuestions(ctx)
 })
 
