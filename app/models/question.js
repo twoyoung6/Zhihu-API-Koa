@@ -14,6 +14,15 @@ const questionSchema = new Schema({
     select: false,
     required: true,
   },
+  topicList: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Topics',
+      },
+    ],
+    select: false,
+  },
 })
 
 module.exports = model('Question', questionSchema)

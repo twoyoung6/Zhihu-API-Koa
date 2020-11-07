@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const topicsModel = require('../models/topics.js')
 const userModel = require('../models/user.js')
+const questionModel = require('../models/question.js')
 const { decorator } = require('../utils/utils.js') // 请求 response 统一处理脚本
 class TopicsC {
   // 授权
@@ -77,6 +78,7 @@ class TopicsC {
       ctx.request.body,
       { new: true }
     )
+
     if (!topics) {
       ctx.throw(400, '编辑话题失败...')
       return
@@ -102,6 +104,17 @@ class TopicsC {
     } catch (error) {
       ctx.body = decorator({ code: 400, message: '响应失败' })
     }
+  }
+
+  // 获取 某话题下的问题列表
+  async getTopicQuestions(ctx) {
+    ctx.verifyParams({
+      id: { type: 'string', required: true },
+    })
+    let list = await questionModel.find({ topicList: ctx.request.body.id })
+    ctx.body = decorator({
+      data: list,
+    })
   }
 }
 

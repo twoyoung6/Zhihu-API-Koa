@@ -42,7 +42,10 @@ class QuestionC {
     ctx.verifyParams({
       id: { type: 'string', required: true },
     })
-    const question = await questionModel.findById(ctx.request.body.id)
+    const question = await questionModel
+      .findById(ctx.request.body.id)
+      .populate('createUser topicList') // 问题-话题多对多，一个问题包含多个话题 topicList
+
     ctx.body = decorator({
       data: question,
     })

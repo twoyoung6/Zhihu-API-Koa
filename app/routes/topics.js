@@ -12,6 +12,7 @@ const {
   editTopics,
   checkUserAuth,
   getTopicFollows,
+  getTopicQuestions,
 } = require('../controllers/topics.js')
 
 const auth = jwt({ secret })
@@ -41,5 +42,8 @@ router.post(
 // 获取关注该话题的用户列表
 router.post('/getTopicFollows', auth, checkTopicExist, async (ctx, next) => {
   await getTopicFollows(ctx)
+})
+router.post('/getTopicQuestions', checkTopicExist, async (ctx, next) => {
+  await getTopicQuestions(ctx)
 })
 module.exports = router
