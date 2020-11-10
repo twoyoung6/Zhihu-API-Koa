@@ -1,4 +1,3 @@
-const mongoose = require('mongoose')
 const topicsModel = require('../models/topics.js')
 const userModel = require('../models/user.js')
 const questionModel = require('../models/question.js')

@@ -1,7 +1,4 @@
-const mongoose = require('mongoose')
-const question = require('../models/question.js')
 const questionModel = require('../models/question.js')
-const userModel = require('../models/user.js')
 const { decorator } = require('../utils/utils.js') // 请求 response 统一处理脚本
 class QuestionC {
   // 🍎检测问题的有效性
@@ -12,6 +9,7 @@ class QuestionC {
         code: 400,
         message: '该话题不存在',
       })
+      return
     }
     ctx.state.question = question // 会话缓存 question
     await next()
