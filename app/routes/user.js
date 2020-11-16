@@ -19,7 +19,11 @@ const {
   unFollowTopic,
   checkTopicExist,
   getFollowTopicsList,
+  getLikeAnswerList,
+  likeAnswer,
+  hateAnswer,
 } = require('../controllers/user')
+const { checkAnswerExist } = require('../controllers/answer')
 
 // 路由中传递多中间件（认证 及 授权中间件）
 // const auth = require('../auth') // 自己实现的 jwt
@@ -78,5 +82,17 @@ router.post('/unFollowTopic', auth, checkTopicExist, async (ctx, next) => {
 // 获取用户当前关注的话题列表
 router.post('/getFollowTopicsList', auth, async (ctx, next) => {
   await getFollowTopicsList(ctx)
+})
+// 登录用户喜欢赞同的答案列表
+router.post('/getLikeAnswerList', auth, async (ctx, next) => {
+  await getLikeAnswerList(ctx)
+})
+// 喜欢答案/取消
+router.post('/likeAnswer', auth, checkAnswerExist, async (ctx, next) => {
+  await likeAnswer(ctx, next)
+})
+// 踩答案/取消
+router.post('/hateAnswer', auth, checkAnswerExist, async (ctx, next) => {
+  await hateAnswer(ctx, next)
 })
 module.exports = router

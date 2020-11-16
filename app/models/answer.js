@@ -14,6 +14,11 @@ const answerSchema = new Schema({
     select: false,
     required: true,
   },
+  likeCount: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
 })
 
 module.exports = model('Answer', answerSchema)

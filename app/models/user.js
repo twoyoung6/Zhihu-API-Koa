@@ -63,6 +63,14 @@ const userSchema = new Schema({
     type: [{ type: Schema.Types.ObjectId, ref: 'Topics' }],
     select: false,
   },
+  likeAnswers: {
+    type: [{ type: Schema.Types.ObjectId, ref: 'Answer' }],
+    select: false,
+  },
+  hateAnswers: {
+    type: [{ type: Schema.Types.ObjectId, ref: 'Answer' }],
+    select: false,
+  },
 })
 
 // model 申明（实例化） userSchema 表

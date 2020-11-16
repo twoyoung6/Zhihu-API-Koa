@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const userModel = require('../models/user')
 const topicsModel = require('../models/topics')
+const answerModel = require('../models/answer')
 const jsonwebtoken = require('jsonwebtoken')
 const { secret } = require('../config')
 const { decorator } = require('../utils/utils.js') // 请求 response 统一处理脚本
@@ -341,6 +342,110 @@ class UserC {
     ctx.body = decorator({
       data: data.followTopics,
     })
+  }
+
+  // 登录用户喜欢赞同的答案列表
+  async getLikeAnswerList(ctx) {
+    const data = await userModel
+      .findById(ctx.state.user._id)
+      .populate('likeAnswers')
+      .select('+likeAnswers')
+    if (!data) {
+      ctx.body = decorator({
+        massage: '用户不存在',
+        code: 404,
+      })
+    }
+    console.log(data)
+    ctx.body = decorator({
+      data: data.likeAnswers,
+    })
+  }
+  // 赞同 / 取消赞同答案
+  async likeAnswer(ctx, next) {
+    ctx.verifyParams({
+      answerId: { type: 'string', require: true },
+    })
+    let param = ctx.request.body.answerId
+    // 获取赞同喜欢过的答案列表
+    const me = await userModel
+      .findById(ctx.state.user._id)
+      .select('+likeAnswers')
+    if (
+      !me.likeAnswers
+        .map((val) => {
+          return val && `${val}`
+        })
+        .includes(param)
+    ) {
+      me.likeAnswers.push(param)
+      me.save()
+      await answerModel.findByIdAndUpdate(param, { $inc: { likeCount: 1 } }) // 答案的喜欢数量增 1
+      ctx.body = decorator({
+        message: '赞同答案成功...',
+        code: 204,
+      })
+      await next()
+    } else {
+      let index = me.likeAnswers
+        .map((val) => {
+          return `${val}`
+        })
+        .findIndex((val) => {
+          return val === param
+        })
+      if (index > -1) {
+        me.likeAnswers.splice(index, 1) // 取消赞同答案
+        me.save()
+        await answerModel.findByIdAndUpdate(param, { $inc: { likeCount: -1 } }) // 答案的喜欢数量减 1
+        ctx.body = decorator({
+          code: 203,
+          message: '您已经取消赞同...',
+        })
+        await next()
+      }
+    }
+  }
+  // 踩答案
+  async hateAnswer(ctx, next) {
+    ctx.verifyParams({
+      answerId: { type: 'string', require: true },
+    })
+    let param = ctx.request.body.answerId
+    // 获取我踩过的答案列表
+    const me = await userModel
+      .findById(ctx.state.user._id)
+      .select('+hateAnswers')
+    if (
+      me.hateAnswers
+        .map((val) => {
+          return `${val}`
+        })
+        .includes(param)
+    ) {
+      let index = me.hateAnswers
+        .map((val) => {
+          return val && `${val}`
+        })
+        .findIndex((val) => {
+          return val == param
+        })
+      me.hateAnswers.splice(index, 1) // 取消答案
+      me.save()
+      ctx.body = decorator({
+        message: '取消踩成功...',
+        code: 200,
+      })
+      await next()
+    } else {
+      me.hateAnswers.push(param)
+      me.save()
+      ctx.body = decorator({
+        code: 204,
+        message: '踩一踩答案成功...',
+      })
+      await next()
+    }
   }
 }
 
