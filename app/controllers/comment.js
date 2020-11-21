@@ -36,6 +36,7 @@ class CommentC {
     ctx.verifyParams({
       answerId: { type: 'string', required: true },
       questionId: { type: 'string', required: true },
+      rootId: { type: 'string', required: false },
       size: { type: 'number', required: true },
       page: { type: 'number', required: true },
     })
@@ -47,9 +48,11 @@ class CommentC {
           content: new RegExp(ctx.request.body.q),
           questionId: ctx.request.body.questionId,
           answerId: ctx.request.body.answerId,
+          rootId: ctx.request.body.rootId,
         }) // 正则匹配，模糊搜索
         .limit(size)
-        .skip(page * size),
+        .skip(page * size)
+        .populate('from to rootId'),
     })
   }
   // 评论详情
@@ -59,7 +62,7 @@ class CommentC {
     })
     const comment = await commentModel
       .findById(ctx.request.body.commentId)
-      .populate('from')
+      .populate('from to rootId')
     if (!comment) {
       ctx.body = decorator({
         code: 400,
@@ -77,6 +80,8 @@ class CommentC {
       answerId: { type: 'string', required: true },
       questionId: { type: 'string', required: true },
       content: { type: 'string', required: true },
+      rootId: { type: 'string', required: false },
+      to: { type: 'string', required: false },
     })
     const comment = await new commentModel({
       ...ctx.request.body,
@@ -95,9 +100,13 @@ class CommentC {
     ctx.verifyParams({
       content: { type: 'string', required: true },
     })
-    await ctx.state.comment.update(ctx.request.body, {
-      new: true,
-    })
+    const { content } = ctx.request.body
+    await ctx.state.comment.update(
+      { content },
+      {
+        new: true,
+      }
+    )
     if (!ctx.state.comment) {
       ctx.throw(400, '修改评论失败...')
       return
@@ -110,9 +119,11 @@ class CommentC {
   // 获取登录用户发布的评论列表
   async getUserCreateComments(ctx) {
     try {
-      const commentList = await commentModel.find({
-        from: ctx.state.user._id,
-      })
+      const commentList = await commentModel
+        .find({
+          from: ctx.state.user._id,
+        })
+        .populate('from to rootId')
       ctx.body = decorator({
         message: '查询成功',
         data: commentList,

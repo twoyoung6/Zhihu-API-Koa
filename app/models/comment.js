@@ -9,11 +9,16 @@ const commentSchema = new Schema({
   questionId: { type: String, required: true, select: true },
   answerId: { type: String, required: true, select: true },
   content: { type: String, required: true },
+  rootId: { type: Schema.Types.ObjectId, ref: 'Comment', select: true },
   from: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     select: false,
     required: true,
+  },
+  to: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
   },
 })
 
