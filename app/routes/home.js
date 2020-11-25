@@ -14,6 +14,6 @@ router.post('/', async (ctx, next) => {
 })
 // 图片上传路由
 router.post('/upload', async (ctx, next) => {
-  await upload(ctx)
+  // await upload(ctx)
 })
 module.exports = router
