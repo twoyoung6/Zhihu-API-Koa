@@ -3,6 +3,7 @@ const userModel = require('../models/user')
 const topicsModel = require('../models/topics')
 const answerModel = require('../models/answer')
 const jsonwebtoken = require('jsonwebtoken')
+const Crypt = require('../utils/bcryptjs')
 const { secret } = require('../config')
 const { decorator } = require('../utils/utils.js') // 请求 response 统一处理脚本
 class UserC {
@@ -75,7 +76,10 @@ class UserC {
     if (isRepeat) {
       ctx.throw(409, '好巧~~~该名称已被注册了...')
     }
-    const user = await new userModel(ctx.request.body).save()
+    // 对明文密码加密存入数据库
+    let params = ctx.request.body
+    params.password = Crypt.encrypt(params.password)
+    const user = await new userModel(params).save()
     if (!user) {
       ctx.throw(400, '新增用户失败...')
       return
@@ -83,6 +87,44 @@ class UserC {
     ctx.body = decorator({
       message: '用户注册（新增）成功',
     })
+  }
+
+  // 登录
+  async login(ctx) {
+    // 1.0 校验入参（用户名称及密码），必输项；
+    // 2.0 未查询到有效的用户信息则提示前端非法的用户名及密码；如查询到用户信息则 3.0；
+    // 3.0 调用 bcrypt 的 compareSync 解密方法进行明文密码与加密密码比对，如错误，则告诉前端密码错误；如正确则 4.0；
+    // 4.0 调用 jwt 的 sign 方法签发一个token给前端；签发的内容是用 id 及 name；
+    //    4.1后面前端再发来其他请求并携带这个 token 时，用 jwt({ secret }) 验证 token 是否有效（认证当前是否处于登录状态）；详见 routes/user.js
+    ctx.verifyParams({
+      name: { type: 'string', require: true },
+      password: { type: 'string', require: true },
+    })
+    const data = ctx.request.body
+    // 通过账户名称查找数据
+    const user = await userModel
+      .findOne({ name: data.name })
+      .select('+password')
+    if (!user) {
+      ctx.throw(404, '该用户不存在...')
+    }
+    // 校验用户输入的密码和数据库中的加密密码
+    let checkPassword = null
+    if (data.name == 'admin') {
+      checkPassword = data.password === user.password
+    } else {
+      checkPassword = Crypt.decrypt(data.password, user.password)
+    }
+    if (!checkPassword) {
+      ctx.throw(404, '非法的密码...')
+    }
+    let { _id, name } = user
+
+    const token = jsonwebtoken.sign({ _id, name }, secret, { expiresIn: '1d' })
+    ctx.body = {
+      token: token,
+      message: '登录成功...',
+    }
   }
   // 修改用户
   async editUser(ctx) {
@@ -124,23 +166,6 @@ class UserC {
     ctx.body = decorator({
       message: '删除成功',
     })
-  }
-  // 登录
-  async login(ctx) {
-    ctx.verifyParams({
-      name: { type: 'string', require: true },
-      password: { type: 'string', require: true },
-    })
-    const user = await userModel.findOne(ctx.request.body)
-    if (!user) {
-      ctx.throw(404, '非法的用户名及密码...')
-    }
-    let { _id, name } = user
-    const token = jsonwebtoken.sign({ _id, name }, secret, { expiresIn: '1d' })
-    ctx.body = {
-      token: token,
-      message: '登录成功...',
-    }
   }
   // 登录用户的关注
   async getFollowList(ctx) {

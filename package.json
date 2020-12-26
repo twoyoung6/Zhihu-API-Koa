@@ -13,6 +13,7 @@
   "author": "twoyoung",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.0",
     "koa-body": "^4.2.0",
