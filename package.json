@@ -22,7 +22,8 @@
     "koa-parameter": "^3.0.1",
     "koa-router": "^9.4.0",
     "koa-static": "^5.0.0",
-    "mongoose": "^5.10.9"
+    "mongoose": "^5.10.9",
+    "readline-sync": "^1.4.10"
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
