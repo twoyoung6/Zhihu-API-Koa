@@ -42,6 +42,14 @@ app.use(
   })
 )
 
+// logger 请求日志
+app.use(async (ctx, next) => {
+  const start = new Date()
+  await next()
+  const ms = new Date() - start
+  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
+})
+
 // http 参数校验中间件
 app.use(parameter(app))
 signRoute(app)
