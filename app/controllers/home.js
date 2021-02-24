@@ -1,9 +1,6 @@
 const path = require('path')
+const { login } = require('./user')
 class HomeC {
-  index(ctx) {
-    // ctx.throw(500)
-    ctx.body = `<h1>知乎主页</h1>`
-  }
   hello(ctx) {
     ctx.throw(404) // 手动抛出异常
     ctx.body = `hello koa ${ctx.params.name} ${ctx.params.age}`
@@ -29,6 +26,16 @@ class HomeC {
     } catch (error) {
       ctx.throw(400, '图片上传失败')
     }
+  }
+  // 登录模块控制器
+  async login(ctx) {
+    const { name, password } = ctx.request.body;
+    if (!name && !password) {
+      ctx.throw(401, '请输入正确的账户及密码')
+      return
+    }
+    console.log('===执行登录===');
+    await login(ctx)
   }
 }
 

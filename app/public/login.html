@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Two Young 个人中心</title>
+    <link rel="stylesheet" href="login/index.css" />
+  </head>
+
+  <body>
+    <img src="login/bgImg.jpg" class="bgImg" />
+    <div class="content">
+      <div class="bidTitle">
+        <img src="./login/sheep.png" /><img src="./login/sheep.png" />
+        个人中心登录
+      </div>
+      <div class="logCon">
+        <div class="line">
+          <span>账号:</span>
+          <input id="name" name="name" class="bt_input" type="text" />
+        </div>
+        <div class="line">
+          <span>密码:</span>
+          <input
+            id="password"
+            name="password"
+            class="bt_input"
+            type="password"
+          />
+        </div>
+        <button id="login" type="button" class="logingBut">登录</button>
+        <div class="err"></div>
+      </div>
+      <script src="jquery.min.js"></script>
+      <script>
+        $(function () {
+          $('#login').click(function () {
+            var params = {
+              name: $('#name').val(),
+              password: $('#password').val(),
+            }
+            if (!params.name && !params.password) {
+              $('.err').text('请输入账户名及密码.').show()
+              return
+            }
+            $.post({
+              url: 'http://localhost:4000/login',
+              data: params,
+              success: function (data) {
+                if (data.code == 200) {
+                  sessionStorage.setItem('token', data.token)
+                  $('.err').hide()
+                } else {
+                  $('.err').text(data.message).show()
+                }
+              },
+            })
+            return false
+          })
+        })
+      </script>
+    </div>
+  </body>
+</html>
