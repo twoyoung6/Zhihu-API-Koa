@@ -1,12 +1,12 @@
 const Router = require('koa-router')
-const router = new Router()
+const router = new Router({ prefix: '/api' })
 const { hello, post, upload, login } = require('../controllers/home')
 const jwt = require('koa-jwt')
 const { secret } = require('../config')
 const auth = jwt({ secret })
 
 router.get('/', async (ctx) => {
-  ctx.redirect('login.html');
+  ctx.redirect('login.html')
 })
 //登录路由
 router.post('/login', async (ctx, next) => {
