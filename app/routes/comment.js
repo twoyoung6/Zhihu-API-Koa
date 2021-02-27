@@ -1,7 +1,7 @@
 const jwt = require('koa-jwt')
 const { secret } = require('../config')
 const Router = require('koa-router')
-const router = new Router({ prefix: '/comment' }) // koa-router 路由前缀
+const router = new Router({ prefix: '/api/comment' }) // koa-router 路由前缀
 
 // 引入评论控制器
 const {

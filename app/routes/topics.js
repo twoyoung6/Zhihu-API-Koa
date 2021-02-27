@@ -2,7 +2,7 @@ const jwt = require('koa-jwt')
 const { secret } = require('../config')
 const Router = require('koa-router')
 const { checkTopicExist } = require('../controllers/user.js')
-const router = new Router({ prefix: '/topics' }) // koa-router 路由前缀
+const router = new Router({ prefix: '/api/topics' }) // koa-router 路由前缀
 
 // 引入控制器
 const {

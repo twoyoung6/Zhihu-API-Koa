@@ -1,7 +1,7 @@
 const jwt = require('koa-jwt')
 const { secret } = require('../config')
 const Router = require('koa-router')
-const router = new Router({ prefix: '/users' }) // koa-router 路由前缀
+const router = new Router({ prefix: '/api/users' }) // koa-router 路由前缀
 const {
   userList,
   userInfo,
