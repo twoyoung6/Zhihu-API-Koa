@@ -106,7 +106,11 @@ class UserC {
       .findOne({ name: data.name })
       .select('+password')
     if (!user) {
-      ctx.throw(404, '该用户不存在...')
+      ctx.body = {
+        code: 404,
+        message: '该用户不存在...',
+      }
+      return
     }
     // 校验用户输入的密码和数据库中的加密密码
     let checkPassword = null
@@ -116,12 +120,17 @@ class UserC {
       checkPassword = Crypt.decrypt(data.password, user.password)
     }
     if (!checkPassword) {
-      ctx.throw(404, '非法的密码...')
+      ctx.body = {
+        code: 404,
+        message: '非法的密码...',
+      }
+      return
     }
     let { _id, name } = user
 
     const token = jsonwebtoken.sign({ _id, name }, secret, { expiresIn: '1d' })
     ctx.body = {
+      code: 200,
       token: token,
       message: '登录成功...',
     }
