@@ -13,8 +13,8 @@ const config = require('./config')
 mongoose.connect(
   config.dbUrl,
   { useNewUrlParser: true, useUnifiedTopology: true },
-  console.log('MongoDB 数据库连接成功...')
-)
+).then(() => console.log('MongoDB 数据库连接成功...'))
+  .catch(err => console.log(err));
 mongoose.now('error', () => {
   console.log(error)
 })
